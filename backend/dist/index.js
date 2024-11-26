@@ -17,6 +17,8 @@ require("dotenv/config");
 const data_source_1 = require("./database/data-source");
 const database_1 = require("./database/database");
 const rideController_1 = require("./controllers/rideController");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 // Rotas

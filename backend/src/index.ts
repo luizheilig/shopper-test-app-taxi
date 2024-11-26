@@ -3,6 +3,9 @@ import "dotenv/config";
 import { AppDataSource } from "./database/data-source";
 import { seedDatabase } from "./database/database";
 import { estimateRide } from "./controllers/rideController";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 app.use(express.json());
