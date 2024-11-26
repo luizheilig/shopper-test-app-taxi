@@ -1,5 +1,6 @@
 import { AppDataSource } from "./data-source";
 import { Driver } from "../models/Driver";
+import { RideLog } from "../models/RideLog";
 
 export const seedDatabase = async () => {
   const driverRepository = AppDataSource.getRepository(Driver);

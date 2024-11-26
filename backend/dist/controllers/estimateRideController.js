@@ -13,8 +13,6 @@ exports.estimateRide = void 0;
 const data_source_1 = require("../database/data-source");
 const Driver_1 = require("../models/Driver");
 const googleMapsService_1 = require("../services/googleMapsService");
-const rideService_1 = require("../services/rideService");
-const RideLog_1 = require("../entity/RideLog");
 const estimateRide = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { customer_id, origin, destination } = req.body;
     // Validações iniciais
@@ -56,17 +54,6 @@ const estimateRide = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
             options: availableDrivers,
             routeResponse: routeDetails.routeResponse,
         });
-        const estimation = yield (0, rideService_1.calculateEstimation)(origin, destination);
-        // Registrar no banco de dados
-        const rideLogRepo = data_source_1.AppDataSource.getRepository(RideLog_1.RideLog);
-        const rideLog = rideLogRepo.create({
-            customer_id,
-            origin,
-            destination,
-            price: estimation,
-        });
-        yield rideLogRepo.save(rideLog);
-        res.json({ success: true, estimation });
     }
     catch (error) {
         res.status(500).json({

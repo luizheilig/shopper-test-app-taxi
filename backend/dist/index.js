@@ -16,13 +16,17 @@ const express_1 = __importDefault(require("express"));
 require("dotenv/config");
 const data_source_1 = require("./database/data-source");
 const database_1 = require("./database/database");
-const rideController_1 = require("./controllers/rideController");
+const estimateRideController_1 = require("./controllers/estimateRideController");
 const dotenv_1 = __importDefault(require("dotenv"));
+const confirmRideController_1 = require("./controllers/confirmRideController");
+const getRidesController_1 = require("./controllers/getRidesController");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 // Rotas
-app.post("/ride/estimate", rideController_1.estimateRide);
+app.post("/ride/estimate", estimateRideController_1.estimateRide);
+app.patch("/ride/confirm", confirmRideController_1.confirmRide);
+app.get("/ride/:customer_id", getRidesController_1.getRidesByCustomer);
 data_source_1.AppDataSource.initialize()
     .then(() => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Database connected successfully!");

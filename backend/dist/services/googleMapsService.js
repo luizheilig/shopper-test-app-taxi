@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchRouteDetails = void 0;
 const axios_1 = __importDefault(require("axios"));
 const fetchRouteDetails = (origin, destination) => __awaiter(void 0, void 0, void 0, function* () {
-    const apiKey = 'AIzaSyDhjNS74Zy5tee-GRPSeSYBKCjvhe0f54Q';
+    const apiKey = process.env.GOOGLE_API_KEY;
     const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${apiKey}`;
     try {
         const response = yield axios_1.default.get(url);

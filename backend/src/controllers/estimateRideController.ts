@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { AppDataSource } from "../database/data-source";
 import { Driver } from "../models/Driver";
 import { fetchRouteDetails } from "../services/googleMapsService";
+import { RideLog } from "../models/RideLog";
 
 export const estimateRide = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const { customer_id, origin, destination } = req.body;
@@ -50,6 +51,7 @@ export const estimateRide = async (req: Request, res: Response, next: NextFuncti
       options: availableDrivers,
       routeResponse: routeDetails.routeResponse,
     });
+
   } catch (error) {
     res.status(500).json({
       error_code: "INTERNAL_ERROR",

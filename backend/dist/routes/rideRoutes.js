@@ -1,7 +1,13 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const rideController_1 = require("../controllers/rideController");
-const router = (0, express_1.Router)();
-router.post("/ride/estimate", rideController_1.estimateRide);
-exports.default = router;
+/* import { Router } from "express";
+import { estimateRide } from "../controllers/estimateRideController";
+import { confirmRide } from "../controllers/confirmRideController";
+
+const router = Router();
+
+router.post("/ride/estimate", estimateRide);
+router.patch("/ride/confirm", confirmRide);
+router.get("/ride/confirm", confirmRide);
+
+export default router;
+ */ 
