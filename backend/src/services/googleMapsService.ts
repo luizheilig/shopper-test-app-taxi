@@ -30,9 +30,9 @@ export const fetchRouteDetails = async (origin: string, destination: string) => 
         latitude: leg.end_location.lat,
         longitude: leg.end_location.lng,
       },
-      distance: leg.distance.value / 1000, // Convert to km
+      distance: leg.distance.value / 1000,
       duration: leg.duration.text,
-      routeResponse: response.data, // Original response
+      routeResponse: response.data,
     };
   } catch (error) {
     throw new Error("Error fetching route details from Google Maps API");

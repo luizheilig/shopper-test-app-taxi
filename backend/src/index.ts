@@ -6,11 +6,17 @@ import { estimateRide } from "./controllers/estimateRideController";
 import dotenv from "dotenv";
 import { confirmRide } from "./controllers/confirmRideController";
 import { getRidesByCustomer } from "./controllers/getRidesController";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
+
+app.use(cors({
+  origin: "http://localhost:5174",
+  methods: "GET,POST,PATCH,DELETE",
+}));
 
 // Rotas
 app.post("/ride/estimate", estimateRide);

@@ -20,9 +20,14 @@ const estimateRideController_1 = require("./controllers/estimateRideController")
 const dotenv_1 = __importDefault(require("dotenv"));
 const confirmRideController_1 = require("./controllers/confirmRideController");
 const getRidesController_1 = require("./controllers/getRidesController");
+const cors_1 = __importDefault(require("cors"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
+app.use((0, cors_1.default)({
+    origin: "http://localhost:5174",
+    methods: "GET,POST,PATCH,DELETE",
+}));
 // Rotas
 app.post("/ride/estimate", estimateRideController_1.estimateRide);
 app.patch("/ride/confirm", confirmRideController_1.confirmRide);
