@@ -31,32 +31,23 @@ __decorate([
     __metadata("design:type", String)
 ], RideLog.prototype, "destination", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "float", nullable: true }) // Permite nulo inicialmente
-    ,
+    (0, typeorm_1.Column)({ type: "float", nullable: true }),
     __metadata("design:type", Number)
 ], RideLog.prototype, "price", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "float", nullable: true }) // Permite nulo inicialmente
-    ,
+    (0, typeorm_1.Column)({ type: "float", nullable: true }),
     __metadata("design:type", Number)
 ], RideLog.prototype, "distance", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }) // Permite nulo inicialmente
-    ,
+    (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], RideLog.prototype, "duration", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }) // Permite nulo inicialmente
-    ,
-    __metadata("design:type", Number)
-], RideLog.prototype, "driver_id", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], RideLog.prototype, "createdAt", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => Driver_1.Driver),
-    (0, typeorm_1.JoinColumn)({ name: "driver_id" }),
+    (0, typeorm_1.ManyToOne)(() => Driver_1.Driver, (driver) => driver.rides, { eager: true }),
     __metadata("design:type", Driver_1.Driver)
 ], RideLog.prototype, "driver", void 0);
 RideLog = __decorate([

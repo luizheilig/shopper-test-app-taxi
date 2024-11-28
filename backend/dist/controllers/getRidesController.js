@@ -17,6 +17,7 @@ const getRidesByCustomer = (req, res, next) => __awaiter(void 0, void 0, void 0,
     try {
         const { customer_id } = req.params;
         const { driver_id } = req.query;
+        console.log(driver_id);
         // Validações
         if (!customer_id) {
             return res.status(400).json({
@@ -34,9 +35,10 @@ const getRidesByCustomer = (req, res, next) => __awaiter(void 0, void 0, void 0,
                 });
             }
         }
-        // Consulta ao banco
+        // Consulta ao banco com join no motorista
         const rideLogRepository = data_source_1.AppDataSource.getRepository(RideLog_1.RideLog);
         const query = rideLogRepository.createQueryBuilder("ride")
+            .leftJoinAndSelect("ride.driver", "driver") // Realiza o join e inclui os dados do motorista
             .where("ride.customer_id = :customer_id", { customer_id })
             .orderBy("ride.createdAt", "DESC");
         if (driver_id) {
@@ -51,7 +53,7 @@ const getRidesByCustomer = (req, res, next) => __awaiter(void 0, void 0, void 0,
         }
         // Formatar a resposta
         const formattedRides = rides.map((ride) => {
-            var _a;
+            var _a, _b;
             return ({
                 id: ride.id,
                 date: ride.createdAt,
@@ -60,12 +62,13 @@ const getRidesByCustomer = (req, res, next) => __awaiter(void 0, void 0, void 0,
                 distance: ride.distance,
                 duration: ride.duration,
                 driver: {
-                    id: ride.driver_id,
-                    name: ((_a = ride.driver) === null || _a === void 0 ? void 0 : _a.name) || "Driver not found", // Isso assume que há um relacionamento carregado
+                    id: ((_a = ride.driver) === null || _a === void 0 ? void 0 : _a.id) || null,
+                    name: ((_b = ride.driver) === null || _b === void 0 ? void 0 : _b.name) || "Driver not found", // Nome do motorista ou mensagem de erro
                 },
                 value: ride.price,
             });
         });
+        console.log(formattedRides);
         return res.status(200).json({
             customer_id,
             rides: formattedRides,

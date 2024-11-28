@@ -3,6 +3,7 @@ import { AppDataSource } from "../database/data-source";
 import { Driver } from "../models/Driver";
 import { fetchRouteDetails } from "../services/googleMapsService";
 import { RideLog } from "../models/RideLog";
+import { constants } from "buffer";
 
 export const estimateRide = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const { customer_id, origin, destination } = req.body;
@@ -23,14 +24,11 @@ export const estimateRide = async (req: Request, res: Response, next: NextFuncti
   }
 
   try {
-    // Obtém o repositório de motoristas
     const driverRepository = AppDataSource.getRepository(Driver);
     const drivers = await driverRepository.find();
 
-    // Chamada para a API do Google Maps
     const routeDetails = await fetchRouteDetails(origin, destination);
 
-    // Calcular motoristas disponíveis
     const availableDrivers = drivers
       .filter(driver => routeDetails.distance >= driver.minKm)
       .map(driver => ({
@@ -44,6 +42,7 @@ export const estimateRide = async (req: Request, res: Response, next: NextFuncti
       .sort((a, b) => a.value - b.value);
 
     res.status(200).json({
+      costumerId: customer_id,
       origin: routeDetails.origin,
       destination: routeDetails.destination,
       distance: routeDetails.distance,

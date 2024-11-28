@@ -4,7 +4,6 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  JoinColumn,
   ManyToOne,
 } from "typeorm";
 
@@ -22,22 +21,18 @@ export class RideLog {
   @Column()
   destination: string;
 
-  @Column({ type: "float", nullable: true }) // Permite nulo inicialmente
+  @Column({ type: "float", nullable: true })
   price: number;
 
-  @Column({ type: "float", nullable: true }) // Permite nulo inicialmente
+  @Column({ type: "float", nullable: true })
   distance: number;
 
-  @Column({ nullable: true }) // Permite nulo inicialmente
+  @Column({ nullable: true })
   duration: string;
-
-  @Column({ nullable: true }) // Permite nulo inicialmente
-  driver_id: number;
 
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => Driver)
-  @JoinColumn({ name: "driver_id" })
+  @ManyToOne(() => Driver, (driver) => driver.rides, { eager: true })
   driver: Driver;
 }

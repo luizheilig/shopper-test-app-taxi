@@ -8,6 +8,8 @@ export const getRidesByCustomer = async (req: Request, res: Response, next: Next
     const { customer_id } = req.params;
     const { driver_id } = req.query;
 
+    console.log(driver_id)
+
     // Validações
     if (!customer_id) {
       return res.status(400).json({
@@ -28,10 +30,11 @@ export const getRidesByCustomer = async (req: Request, res: Response, next: Next
       }
     }
 
-    // Consulta ao banco
+    // Consulta ao banco com join no motorista
     const rideLogRepository = AppDataSource.getRepository(RideLog);
 
     const query = rideLogRepository.createQueryBuilder("ride")
+      .leftJoinAndSelect("ride.driver", "driver") // Realiza o join e inclui os dados do motorista
       .where("ride.customer_id = :customer_id", { customer_id })
       .orderBy("ride.createdAt", "DESC");
 
@@ -57,11 +60,13 @@ export const getRidesByCustomer = async (req: Request, res: Response, next: Next
       distance: ride.distance,
       duration: ride.duration,
       driver: {
-        id: ride.driver_id,
-        name: ride.driver?.name || "Driver not found", // Isso assume que há um relacionamento carregado
+        id: ride.driver?.id || null, // Garante que o código não quebre se o motorista for null
+        name: ride.driver?.name || "Driver not found", // Nome do motorista ou mensagem de erro
       },
       value: ride.price,
     }));
+
+    console.log(formattedRides);
 
     return res.status(200).json({
       customer_id,

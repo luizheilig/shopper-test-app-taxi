@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 const RideRequest: React.FC = () => {
   const [customerId, setCustomerId] = useState<string>("");
@@ -7,6 +8,8 @@ const RideRequest: React.FC = () => {
   const [destination, setDestination] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +29,8 @@ const RideRequest: React.FC = () => {
         destination,
       });
 
-      console.log("Estimativa:", response.data);
+      console.log("Estimativa:", response);
+      navigate('/options', { state: response.data });
       // Redirecionar ou exibir as opções (tratar isso posteriormente)
     } catch (err) {
       // Aqui garantimos que err é do tipo Error com um type assertion

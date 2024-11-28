@@ -47,6 +47,7 @@ const estimateRide = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         }))
             .sort((a, b) => a.value - b.value);
         res.status(200).json({
+            costumerId: customer_id,
             origin: routeDetails.origin,
             destination: routeDetails.destination,
             distance: routeDetails.distance,

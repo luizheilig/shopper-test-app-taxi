@@ -12,11 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.confirmRide = void 0;
 const data_source_1 = require("../database/data-source");
 const RideLog_1 = require("../models/RideLog");
+const Driver_1 = require("../models/Driver");
 const confirmRide = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { customer_id, origin, destination, distance, duration, driver, value } = req.body;
         // Validações obrigatórias
-        if (!customer_id || !origin || !destination || !driver || !value) {
+        if (!customer_id || !origin || !destination || !(driver === null || driver === void 0 ? void 0 : driver.id) || !value) {
             return res.status(400).json({
                 error_code: "INVALID_DATA",
                 error_description: "Campos obrigatórios estão faltando.",
@@ -28,8 +29,8 @@ const confirmRide = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
                 error_description: "Os endereços de origem e destino não podem ser iguais.",
             });
         }
-        // Verificar se o motorista existe no banco de motoristas preexistente
-        const driverRepository = data_source_1.AppDataSource.getRepository("Driver"); // Referencia a tabela/entidade existente
+        // Verificar se o motorista existe no banco de dados
+        const driverRepository = data_source_1.AppDataSource.getRepository(Driver_1.Driver);
         const foundDriver = yield driverRepository.findOne({ where: { id: driver.id } });
         if (!foundDriver) {
             return res.status(404).json({
@@ -37,26 +38,41 @@ const confirmRide = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
                 error_description: "O motorista informado não foi encontrado.",
             });
         }
-        // Validação da quilometragem com base no banco de dados de motoristas existente
-        if (distance <= 0 || distance > foundDriver.max_distance) {
+        // Validação da distância
+        if (distance <= 0) {
             return res.status(406).json({
                 error_code: "INVALID_DISTANCE",
-                error_description: "A quilometragem informada é inválida.",
+                error_description: "A distância informada deve ser maior que 0.",
             });
         }
-        // Salvar os dados no banco de dados
+        // Salvar a corrida no banco de dados
         const rideLogRepo = data_source_1.AppDataSource.getRepository(RideLog_1.RideLog);
         const rideLog = rideLogRepo.create({
             customer_id,
-            origin,
             destination,
-            price: value,
             distance,
+            driver: foundDriver,
             duration,
-            driver_id: foundDriver.id, // Referencia o ID do motorista existente
+            origin,
+            price: value,
         });
         yield rideLogRepo.save(rideLog);
-        return res.status(200).json({ success: true });
+        // Retornar a resposta no formato especificado
+        return res.status(200).json({
+            success: true,
+            ride: {
+                customer_id,
+                origin,
+                destination,
+                distance,
+                duration,
+                driver: {
+                    id: foundDriver.id,
+                    name: foundDriver.name,
+                },
+                value,
+            },
+        });
     }
     catch (error) {
         console.error("Erro ao confirmar a corrida:", error);

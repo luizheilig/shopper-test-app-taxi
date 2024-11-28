@@ -32,7 +32,7 @@ const fetchRouteDetails = (origin, destination) => __awaiter(void 0, void 0, voi
             },
             distance: leg.distance.value / 1000,
             duration: leg.duration.text,
-            routeResponse: response.data, // Original response
+            routeResponse: response.data,
         };
     }
     catch (error) {
